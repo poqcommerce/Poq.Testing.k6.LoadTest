@@ -94,6 +94,7 @@ Each run writes `results/<client>_<env>_<profile>_<timestamp>/`:
 | `report.html` | k6 web dashboard export. It is skipped for very short runs such as `smoke`. |
 | `summary.json` | Full k6 summary data. |
 | `endpoints.csv` | Per request: count, failure %, avg / p90 / p95 / p99 / max, failures, p95 threshold. |
+| `endpoints.html` | The endpoint, scenario and failure tables as one page you can open in a browser (click a column to sort; rows over their limit are shaded). The dashboard `report.html` has run-wide charts only. |
 | `failures.csv` | Failures per request and status. This file holds the complete counts. |
 | `failures.log` | One JSON line per request that did not return its expected result. Detail is capped per virtual user (see below). |
 
