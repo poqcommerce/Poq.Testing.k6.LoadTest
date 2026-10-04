@@ -77,7 +77,7 @@ Each run writes `results/<client>_<env>_<profile>_<timestamp>_{summary.json, end
 | `load` | 100% | ramp-up, then hold (the client's `load` settings) |
 | `paced` | 1 VU per scenario, `MAX_RPM_PER_VU` each | `DURATION` |
 | `custom` | `TARGET_RPS` req/s | `RAMP_UP` + `DURATION` |
-| `scale` | the client's `load.shape`: stages of minutes × a factor of the target rate, scenarios that start later (`startAfter`), scenarios with a fixed iteration count (`fixed`) | the sum of the stages |
+| `scale` | the client's `load.shape`: stages of minutes × a factor of the shape's own base rate (`shape.targetRps`, else `load.targetRps`), scenarios that start later (`startAfter`), scenarios with a fixed iteration count (`fixed`) | the sum of the stages |
 
 For `custom`, the request rate reaches the target about one session length after the ramp ends. With sessions of about 30–50 s, for example, 60 req/s held for a full minute needs `-e RAMP_UP=30s -e DURATION=1m30s`.
 

@@ -35,7 +35,7 @@ scenarios keep after the guest token, as the app does. Reference suite: `hot_top
 
 ## Scale test: run settings (proposed, provisional)
 
-Target: about 2.5M requests in the busiest hour (last year), 85 min, shape in [config.js](config.js) `load.shape`.
+Target: about 2.5M requests in total, 65 min (20 min ramp-up, 40 min peak with three surges, 5 min ramp-down), shape and base rate (`shape.targetRps`) in [config.js](config.js) `load.shape`.
 Nothing here has been run. Every prod-host run needs the user's explicit go-ahead; the scale run also needs the
 rate approved by the client (far above the 60 req/min cap).
 
@@ -50,8 +50,8 @@ clients/hot_topic/test.js
 | Run | When | Profile | Extra flags | Load | Requests |
 |---|---|---|---|---|---|
 | Sanity | about 1 day before | `PROFILE=sanity`: 1% of 694 req/s, 1 min ramp + 4 min | `-e ABORT_DELAY=60s` | about 7 req/s; browser 9, shopper 3, account 1 iterations/min | about 2,000 |
-| Warm-up | the day of the scale run, before it | `PROFILE=warmup`: the scale shape compressed to 15 min at 10% | `-e ABORT_DELAY=90s` | up to about 87 req/s; browser up to 108, shopper 33, account 13 iterations/min; 5 registrations | about 50,000 |
-| Scale | the agreed window | `PROFILE=scale`: 85 min | `-e ABORT_DELAY=3m` | busiest hour 2.5M requests (694 req/s average), up to about 870 req/s in a surge | about 2.9M |
+| Warm-up | the day of the scale run, before it | `PROFILE=warmup`: the scale shape compressed to 15 min at 10% | `-e ABORT_DELAY=90s` | up to about 109 req/s; browser up to 135, shopper 40, account 15 iterations/min; 5 registrations | about 60,000 |
+| Scale | the agreed window | `PROFILE=scale`: 65 min | `-e ABORT_DELAY=3m` | about 787 req/s in the 90% parts, up to about 1,090 req/s in a surge (base rate 874 req/s) | about 2.5M |
 
 - **Sanity** runs browser, shopper and account (the default mix). Check the new registration separately the same day with one
   iteration: `-e PROFILE=smoke -e SCENARIOS=register -e MAX_RPM_PER_VU=12`. A validated product subset is enough
@@ -62,7 +62,7 @@ clients/hot_topic/test.js
 - **Abort guard:** all three stop on more than 10% failures after `ABORT_DELAY` (default `ABORT_FAILED_RATE=0.1`).
 - **Warm-up check before the scale run:** the measured req/iter and total req/s match the plan (browser and shopper 34 req/iter,
   account 39, register 12); correct `requestsPerIteration` in `test.js` if not. Look at the busiest 60 s window afterwards.
-- **VUs:** scale pre-allocates about 1,030 VUs and can grow to about 3,100 (surge headroom). Run it from a machine with enough CPU, memory
+- **VUs:** scale pre-allocates about 1,300 VUs and can grow to about 3,900 (surge headroom; check the numbers with `k6 inspect -e ENV=staging -e PROFILE=scale clients/hot_topic/test.js`). Run it from a machine with enough CPU, memory
   and network for that (a cloud VM, not a laptop), and watch k6 for dropped iterations.
 - **Registrations** create accounts and loyalty profiles that cannot be deleted: 1 (sanity) + 5 (warm-up) + 50 (scale).
 
@@ -95,7 +95,7 @@ clients/hot_topic/test.js
   - `--prom` also streams the metrics to Prometheus for the Grafana dashboard (see the main README).
   - `--save-output` also keeps the console output in `<run folder>/output.txt`. Piping the output into a file stops k6
     drawing its live progress bar (it prints a new text block every second instead), so it is off by default.
-  - Use `tmux` on a VM for the 15 and 85 minute runs, so a dropped SSH session does not stop the test.
+  - Use `tmux` on a VM for the 15 and 65 minute runs, so a dropped SSH session does not stop the test.
 
 ## Test data
 

@@ -5,8 +5,8 @@
 #   clients/hot_topic/scripts/run.sh <sanity|warmup|load> [--env prod|staging] [--max-data-age <hours>] [--save-output] [--prom] [--yes] [--dry-run] [-- extra k6 args]
 #
 #   sanity   1% of the target, 5 min,  about 2,000 requests   (abort check after 60 s)
-#   warmup   10% of the target, 15 min, about 50,000 requests (abort check after 90 s)
-#   load     the full scale shape (PROFILE=scale), 85 min, about 2.9M requests (abort check after 3 min)
+#   warmup   10% of the target, 15 min, about 60,000 requests (abort check after 90 s)
+#   load     the full scale shape (PROFILE=scale), 65 min, about 2.5M requests (abort check after 3 min)
 #
 # --save-output also keeps k6's console output in results/<run>/output.txt (the live progress bar then turns into
 # repeated text blocks, because k6 only draws the bar on a terminal; summary.json and the CSVs already hold the results).
@@ -52,8 +52,8 @@ done
 
 case "$CHOICE" in
   sanity) K6_PROFILE=sanity; ABORT_DELAY=60s; SIZE="about 2,000 requests over 5 min" ;;
-  warmup) K6_PROFILE=warmup; ABORT_DELAY=90s; SIZE="about 50,000 requests over 15 min" ;;
-  load|scale) K6_PROFILE=scale; ABORT_DELAY=3m; SIZE="about 2.9M requests over 85 min (up to ~870 req/s)" ;;
+  warmup) K6_PROFILE=warmup; ABORT_DELAY=90s; SIZE="about 60,000 requests over 15 min" ;;
+  load|scale) K6_PROFILE=scale; ABORT_DELAY=3m; SIZE="about 2.5M requests over 65 min (up to ~1,090 req/s in a surge)" ;;
 esac
 
 case "$MAX_AGE" in ''|*[!0-9.]*) [ -z "$MAX_AGE" ] || { echo "--max-data-age must be a number of hours, got: $MAX_AGE" >&2; exit 1; } ;; esac
