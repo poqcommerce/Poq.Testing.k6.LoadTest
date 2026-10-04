@@ -83,16 +83,17 @@ clients/hot_topic/test.js
 - **Run script** ([scripts/run.sh](scripts/run.sh)): a thin bash wrapper (Linux and macOS) that builds the plain `k6 run`
   command for the three runs above, prints it, and names the outputs. Run it from anywhere:
   ```bash
-  clients/hot_topic/scripts/run.sh <sanity|warmup|load> [--env prod|staging] [--max-data-age <hours>] [--save-output] [--yes] [--dry-run] [-- extra k6 args]
+  clients/hot_topic/scripts/run.sh <sanity|warmup|load> [--env prod|staging] [--max-data-age <hours>] [--save-output] [--prom] [--yes] [--dry-run] [-- extra k6 args]
   ```
   - `load` is `PROFILE=scale`. `ABORT_DELAY` is 60 s, 90 s and 3 min for sanity, warm-up and load.
   - On prod it asks you to type `PROD` first (`--yes` skips it). `--dry-run` prints the command and sends nothing.
   - It does not validate products; do that first (see above). `--max-data-age 72` overrides the 12 h data
     limit (sanity only).
-  - It writes `results/hot_topic_<env>_<run>_<timestamp>_{report.html, failures.log}` next to k6's own
-    `summary.json`, `endpoints.csv` and `failures.csv`. The dashboard is on `localhost:5665`; the HTML report is the
-    saved copy of it, written when the run ends.
-  - `--save-output` also keeps the console output in `results/<run>_output.txt`. Piping the output into a file stops k6
+  - It writes one folder per run, `results/hot_topic_<env>_<run>_<timestamp>/`, with `report.html`, `failures.log`,
+    `summary.json`, `endpoints.csv`, `endpoints.html` and `failures.csv`. The dashboard is on `localhost:5665`; the HTML
+    report is the saved copy of it, written when the run ends.
+  - `--prom` also streams the metrics to Prometheus for the Grafana dashboard (see the main README).
+  - `--save-output` also keeps the console output in `<run folder>/output.txt`. Piping the output into a file stops k6
     drawing its live progress bar (it prints a new text block every second instead), so it is off by default.
   - Use `tmux` on a VM for the 15 and 85 minute runs, so a dropped SSH session does not stop the test.
 

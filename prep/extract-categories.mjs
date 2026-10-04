@@ -13,10 +13,14 @@
 //                       enough to catch a category that fails for sorting; 3 times fewer requests)
 //   --base-only         check only the plain PLP (6 times fewer requests than --all-sorts)
 //   --no-validate       just extract the tree (what the Python extractor did)
-//   --min-items <n>     fewer products than this = not usable (default 1: a category with no products is dropped, any category with at least one product is kept)
+//   --min-items <n>     fewer products than this = not usable (default 7). Tiny categories are the unstable ones: on hottopic-perf
+//                       7 of the 8 categories that answered 500 during the 2026-10-04 prod run had 2-6 products when they were
+//                       last checked, and all of them had passed a single check three days earlier
+//   --no-confirm        skip the confirm pass (default: once every category has been checked, the ones that passed are checked
+//                       a second time, so a category that is flaky or went bad while the run was going is dropped too)
 //   --max-rpm <n>       hard cap on requests per minute for the whole run (default 40)
 //   --limit <n>         validate only the first n categories (a quick look)
-//   --max-age <hours>   resume window (default 24): results younger than this are kept and not checked again
+//   --max-age <hours>   resume window (default 12, the client's maxDataAgeHours): results younger than this are kept and not checked again
 //   --fresh             ignore earlier results and check everything again
 
 // Resuming: every checked category carries its own checkedAt. A new run reads categories_<env>.json and its
@@ -33,7 +37,7 @@ import { parseArgs, loadClient, createApi, nowIso } from './lib/poq-api.mjs';
 const { positional, opts } = parseArgs(process.argv.slice(2), ['--env', '--min-items', '--max-rpm', '--limit', '--max-age']);
 const [clientName] = positional;
 if (!clientName || !opts.env) {
-  console.error('Usage: node prep/extract-categories.mjs <client> --env <dev|staging|prod> [--allow-prod] [--all-sorts] [--base-only] [--no-validate] [--min-items n] [--max-rpm n] [--limit n] [--max-age hours] [--fresh]');
+  console.error('Usage: node prep/extract-categories.mjs <client> --env <dev|staging|prod> [--allow-prod] [--all-sorts] [--base-only] [--no-validate] [--no-confirm] [--min-items n] [--max-rpm n] [--limit n] [--max-age hours] [--fresh]');
   process.exit(2);
 }
 
@@ -44,7 +48,7 @@ try {
   console.error(e.message);
   process.exit(2);
 }
-const minItems = Number(opts['min-items'] ?? 1);
+const minItems = Number(opts['min-items'] ?? 7);
 const api = createApi(ctx, { maxRpm: Number(opts['max-rpm'] ?? 40) });
 const allVariants = ctx.client.plpVariants || [];
 const variants = opts['base-only'] ? [] : opts['all-sorts'] ? allVariants : allVariants.slice(0, 1);
@@ -107,7 +111,7 @@ if (!opts['no-validate']) {
   // Only leaf categories are opened by the app's product lists; parents are listed but not judged.
   const leaves = unique.filter((c) => c.leaf).slice(0, opts.limit ? Number(opts.limit) : undefined);
   const todo = leaves.filter((c) => !c.check);
-  console.log(`${carried} results carried over from earlier runs (younger than ${opts['max-age'] ?? 24} h).`);
+  console.log(`${carried} results carried over from earlier runs (younger than ${opts['max-age'] ?? 12} h).`);
   console.log(`Checking ${todo.length} leaf categories${variants.length ? ` (plain list + ${variants.length} sort order${variants.length > 1 ? 's' : ''} each)` : ' (plain list only)'}, at most ${opts['max-rpm'] ?? 40} requests/min…`);
   let n = 0;
   for (const c of todo) {
@@ -116,6 +120,22 @@ if (!opts['no-validate']) {
     c.checkedAt = nowIso();
     console.log(`[${n}/${todo.length}] ${c.id}: ${c.check.ok ? `ok (${c.check.items} products)` : c.check.reason}`);
     if (n % 10 === 0) save(true);
+  }
+
+  // Confirm pass: a category that passed once is checked again after the whole first pass, minutes later, so one that
+  // is flaky or went bad in between is dropped. Results already confirmed (this run or a resumed one) are not repeated.
+  if (!opts['no-confirm']) {
+    const again = leaves.filter((c) => c.check && c.check.ok && !c.check.confirmed);
+    console.log(`Confirm pass: checking ${again.length} categories that passed once…`);
+    let m = 0;
+    for (const c of again) {
+      m++;
+      const r = await check(c.id);
+      c.check = r.ok ? { ...r, confirmed: true } : { ...r, reason: `unstable (passed before): ${r.reason}` };
+      c.checkedAt = nowIso();
+      if (!r.ok) console.log(`[confirm ${m}/${again.length}] ${c.id}: ${c.check.reason}`);
+      if (m % 10 === 0) save(true);
+    }
   }
 }
 
@@ -158,7 +178,7 @@ function save(partial) {
 
 // Copies earlier check results onto the freshly extracted categories (same environment and API path only).
 function carryOver(list) {
-  const maxAgeMs = Number(opts['max-age'] ?? 24) * 3.6e6;
+  const maxAgeMs = Number(opts['max-age'] ?? 12) * 3.6e6;
   const byId = new Map(list.map((c) => [c.id, c]));
   let n = 0;
   for (const file of [`clients/${clientName}/data/categories_${opts.env}.json`, `clients/${clientName}/data/categories_${opts.env}.json.partial`]) {
@@ -177,6 +197,8 @@ function carryOver(list) {
       // A rejection for too few products under an older, stricter --min-items is checked again.
       const few = !old.check.ok && /^too few products \((\d+)\)/.exec(old.check.reason);
       if (few && Number(few[1]) >= minItems) continue;
+      // A pass with fewer products than today's --min-items is checked again too.
+      if (old.check.ok && !(old.check.items >= minItems)) continue;
       if (c.check && c.checkedAt >= at) continue; // keep the newer result
       if (!c.check) n++;
       c.check = old.check;

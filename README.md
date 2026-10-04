@@ -102,6 +102,28 @@ The terminal prints the same scenario and endpoint tables. It also shows **req/i
 
 **Exit codes:** `0` all thresholds passed; `99` thresholds breached; other codes mean k6 could not run (for example, stale data or a setup failure).
 
+## Live Grafana dashboard (optional)
+
+The k6 web dashboard (`K6_WEB_DASHBOARD=true`, port 5665) shows run-wide charts only. For per-endpoint charts, push the
+metrics to Prometheus and view them in Grafana. Requests carry a `name` tag, so panels group by `name`.
+
+1. Run Prometheus and Grafana once, on the machine that runs k6, e.g. with Docker Compose. Prometheus needs
+   `--web.enable-remote-write-receiver`; bind both ports to `127.0.0.1` (ports 9090 and 3000). In Grafana add a Prometheus
+   data source (`http://prometheus:9090` when both run in Compose) and import the "k6 Prometheus" dashboard (ID 19665).
+2. Add k6's own Prometheus output to the run. Dropping the `url` system tag keeps the label count low:
+   ```bash
+   K6_PROMETHEUS_RW_SERVER_URL=http://localhost:9090/api/v1/write K6_PROMETHEUS_RW_TREND_STATS="avg,p(95),p(99),max" \
+   k6 run -o experimental-prometheus-rw --tag testid=<run name> \
+     --system-tags=proto,subproto,status,method,scenario,expected_response,error,error_code,tls_version,group ...
+   ```
+3. Open Grafana, pick the `testid` in the dashboard and set the time range to the last 15 minutes with a 5 s refresh.
+
+- **k6 on your own machine:** open http://localhost:3000 directly.
+- **k6 on a VM:** nothing is exposed; tunnel the ports from your machine and open http://localhost:3000:
+  `ssh -N -L 3000:localhost:3000 -L 5665:localhost:5665 <vm>`. (The k6 dashboard on 5665 works the same way.)
+- Prometheus keeps the data (7 days with `--storage.tsdb.retention.time=7d`), so past runs stay visible after k6 ends.
+  The dashboard from `K6_WEB_DASHBOARD` disappears with the run; keep its `report.html` export.
+
 ## Grafana Cloud k6 (optional)
 
 Stream a run to Grafana Cloud k6 with k6's own cloud output. Nothing else changes.
