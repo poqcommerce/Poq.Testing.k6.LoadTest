@@ -87,18 +87,21 @@ export default {
     targetRps: 694,
     rampUp: '30m',
     hold: '30m',
-    // PROFILE=scale (provisional, user request 2026-10-01): the busiest 60 minutes hold about 2.5M requests
-    // (last year's ~2.5M requests/hour); concurrency follows from the shape. stages = [minutes, factor of
-    // targetRps]: 20 min gradual ramp, 60 min around 90% with three surges (125%, 115%, 125%), 5 min
-    // ramp-down. Logged-in users start 15 min in; about 50 registrations over minutes 20-75.
+    // PROFILE=scale (provisional, user request 2026-10-04): 65 min in total, about 2.5M requests in all
+    // (ramps included); concurrency follows from the shape. stages = [minutes, factor of shape.targetRps]:
+    // 20 min gradual ramp, 40 min around 90% with three surges (125%, 115%, 125%), 5 min ramp-down.
+    // shape.targetRps is the base rate of the shape alone: 2.5M / (47.65 factor-minutes x 60 s) = 874 req/s,
+    // so about 787 req/s in the 90% parts and about 1,090 req/s in a 125% surge. load.targetRps (694, from
+    // JMeter) stays for the plain `load` profile. Logged-in users start 15 min in; 50 registrations over minutes 20-60.
     shape: {
+      targetRps: 874,
       stages: [
         [5, 0.1], [5, 0.3], [5, 0.55], [5, 0.8], // ramp-up
-        [12, 0.9], [3, 1.25], [10, 0.9], [3, 1.15], [12, 0.9], [3, 1.25], [10, 0.9], [7, 0.9], // peak hour with surges
+        [8, 0.9], [2, 1.25], [7, 0.9], [2, 1.15], [8, 0.9], [2, 1.25], [7, 0.9], [4, 0.9], // peak with surges
         [5, 0.2], // ramp-down
       ],
       startAfter: { account: 15 },
-      fixed: { register: { count: 50, startAfter: 20, over: 55 } },
+      fixed: { register: { count: 50, startAfter: 20, over: 40 } },
     },
   },
 
