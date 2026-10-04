@@ -8,11 +8,11 @@
 #   warmup   10% of the target, 15 min, about 50,000 requests (abort check after 90 s)
 #   load     the full scale shape (PROFILE=scale), 85 min, about 2.9M requests (abort check after 3 min)
 #
-# --save-output also keeps k6's console output in results/<run>_output.txt (the live progress bar then turns into
+# --save-output also keeps k6's console output in results/<run>/output.txt (the live progress bar then turns into
 # repeated text blocks, because k6 only draws the bar on a terminal; summary.json and the CSVs already hold the results).
 # --max-data-age 72 overrides the 12 h data limit for this run (MAX_DATA_AGE_HOURS=72 before or after the command works too).
-# Every run writes results/<run>_{report.html, failures.log}; k6 itself adds
-# results/hot_topic_<env>_<profile>_<timestamp>_{summary.json, endpoints.csv, failures.csv}.
+# Every run gets its own folder, results/hot_topic_<env>_<profile>_<timestamp>/, holding report.html, failures.log,
+# summary.json, endpoints.csv, endpoints.html and failures.csv (RUN_DIR tells the test where to write its files).
 # Live dashboard: http://localhost:5665 (open an SSH tunnel first: ssh -L 5665:localhost:5665 <vm>).
 
 set -euo pipefail
@@ -54,17 +54,18 @@ esac
 case "$MAX_AGE" in ''|*[!0-9.]*) [ -z "$MAX_AGE" ] || { echo "--max-data-age must be a number of hours, got: $MAX_AGE" >&2; exit 1; } ;; esac
 command -v k6 >/dev/null || { echo "k6 is not installed or not on PATH" >&2; exit 1; }
 [ -f secrets/hot_topic.secrets ] || { echo "Missing secrets/hot_topic.secrets (the account scenario signs its requests)" >&2; exit 1; }
-mkdir -p results
-
-RUN="hot_topic_${ENV_NAME}_${CHOICE}_$(date +%Y%m%d-%H%M)"
+RUN="hot_topic_${ENV_NAME}_${CHOICE}_$(date +%Y%m%d-%H%M%S)"
+RUN_DIR="results/${RUN}"
+mkdir -p "$RUN_DIR"
 
 CMD=(k6 run
   -e "ENV=${ENV_NAME}"
   -e "PROFILE=${K6_PROFILE}"
   -e "ABORT_DELAY=${ABORT_DELAY}"
+  -e "RUN_DIR=${RUN_DIR}"
   --secret-source=file=secrets/hot_topic.secrets
   --log-format raw
-  --console-output "results/${RUN}_failures.log")
+  --console-output "${RUN_DIR}/failures.log")
 [ "$ENV_NAME" = prod ] && CMD+=(-e ALLOW_PROD=true)
 [ -n "$MAX_AGE" ] && CMD+=(-e "MAX_DATA_AGE_HOURS=${MAX_AGE}")
 [ ${#EXTRA[@]} -gt 0 ] && CMD+=("${EXTRA[@]}")
@@ -72,7 +73,7 @@ CMD+=(clients/hot_topic/test.js)
 
 export K6_WEB_DASHBOARD=true
 export K6_WEB_DASHBOARD_PORT=5665
-export K6_WEB_DASHBOARD_EXPORT="results/${RUN}_report.html"
+export K6_WEB_DASHBOARD_EXPORT="${RUN_DIR}/report.html"
 
 echo "Hot Topic ${CHOICE} on ${ENV_NAME}: ${SIZE}"
 echo "Command:"
@@ -88,10 +89,10 @@ if [ "$ENV_NAME" = prod ] && ! $ASSUME_YES; then
   [ "$ANSWER" = PROD ] || { echo "Cancelled."; exit 1; }
 fi
 
-echo "Dashboard: http://localhost:5665 (through your SSH tunnel)   Report: results/${RUN}_report.html"
+echo "Dashboard: http://localhost:5665 (through your SSH tunnel)   Report: ${RUN_DIR}/report.html"
 set +e
 if $SAVE_OUTPUT; then
-  "${CMD[@]}" 2>&1 | tee "results/${RUN}_output.txt"
+  "${CMD[@]}" 2>&1 | tee "${RUN_DIR}/output.txt"
   STATUS=${PIPESTATUS[0]}
 else
   "${CMD[@]}"
@@ -101,5 +102,5 @@ set -e
 
 echo
 echo "k6 exit code: ${STATUS} (0 = thresholds passed, 99 = thresholds breached, 108 = aborted)"
-echo "Files: results/${RUN}_report.html  results/${RUN}_failures.log$($SAVE_OUTPUT && echo "  results/${RUN}_output.txt")"
+echo "Files: ${RUN_DIR}/"
 exit "$STATUS"
