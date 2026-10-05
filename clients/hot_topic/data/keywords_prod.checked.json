@@ -1,0 +1,778 @@
+{
+ "client": "hot_topic",
+ "env": "prod",
+ "apiPath": "hottopic-perf/v2",
+ "repeat": 3,
+ "predictive": true,
+ "savedAt": "2026-10-04T14:23:38Z",
+ "keywords": {
+  "band tee": {
+   "ok": true,
+   "checkedAt": "2026-10-04T13:55:05Z"
+  },
+  "graphic tee": {
+   "ok": true,
+   "checkedAt": "2026-10-04T13:55:14Z"
+  },
+  "band t-shirt": {
+   "ok": true,
+   "checkedAt": "2026-10-04T13:55:23Z"
+  },
+  "hoodie": {
+   "ok": true,
+   "checkedAt": "2026-10-04T13:55:32Z"
+  },
+  "zip up hoodie": {
+   "ok": true,
+   "checkedAt": "2026-10-04T13:55:41Z"
+  },
+  "sweatshirt": {
+   "ok": true,
+   "checkedAt": "2026-10-04T13:55:50Z"
+  },
+  "crewneck": {
+   "ok": true,
+   "checkedAt": "2026-10-04T13:55:59Z"
+  },
+  "flannel": {
+   "ok": true,
+   "checkedAt": "2026-10-04T13:56:09Z"
+  },
+  "oversized tee": {
+   "ok": true,
+   "checkedAt": "2026-10-04T13:56:18Z"
+  },
+  "long sleeve": {
+   "ok": true,
+   "checkedAt": "2026-10-04T13:56:27Z"
+  },
+  "tank top": {
+   "ok": true,
+   "checkedAt": "2026-10-04T13:56:36Z"
+  },
+  "crop top": {
+   "ok": true,
+   "checkedAt": "2026-10-04T13:56:45Z"
+  },
+  "baby tee": {
+   "ok": true,
+   "checkedAt": "2026-10-04T13:56:54Z"
+  },
+  "jacket": {
+   "ok": true,
+   "checkedAt": "2026-10-04T13:57:03Z"
+  },
+  "denim jacket": {
+   "ok": true,
+   "checkedAt": "2026-10-04T13:57:12Z"
+  },
+  "bomber jacket": {
+   "ok": true,
+   "checkedAt": "2026-10-04T13:57:21Z"
+  },
+  "jeans": {
+   "ok": true,
+   "checkedAt": "2026-10-04T13:57:30Z"
+  },
+  "skinny jeans": {
+   "ok": true,
+   "checkedAt": "2026-10-04T13:57:39Z"
+  },
+  "cargo pants": {
+   "ok": true,
+   "checkedAt": "2026-10-04T13:57:48Z"
+  },
+  "shorts": {
+   "ok": true,
+   "checkedAt": "2026-10-04T13:57:57Z"
+  },
+  "skirt": {
+   "ok": true,
+   "checkedAt": "2026-10-04T13:58:08Z"
+  },
+  "mini skirt": {
+   "ok": true,
+   "checkedAt": "2026-10-04T13:58:17Z"
+  },
+  "dress": {
+   "ok": true,
+   "checkedAt": "2026-10-04T13:58:26Z"
+  },
+  "black dress": {
+   "ok": true,
+   "checkedAt": "2026-10-04T13:58:35Z"
+  },
+  "leggings": {
+   "ok": true,
+   "checkedAt": "2026-10-04T13:58:44Z"
+  },
+  "joggers": {
+   "ok": false,
+   "call": "search",
+   "reason": "network",
+   "detail": "The operation was aborted due to timeout, round 2 of 3",
+   "requestId": null,
+   "checkedAt": "2026-10-04T13:59:03Z"
+  },
+  "sweatpants": {
+   "ok": true,
+   "checkedAt": "2026-10-04T13:59:11Z"
+  },
+  "pajamas": {
+   "ok": true,
+   "checkedAt": "2026-10-04T13:59:21Z"
+  },
+  "pajama pants": {
+   "ok": true,
+   "checkedAt": "2026-10-04T13:59:30Z"
+  },
+  "socks": {
+   "ok": true,
+   "checkedAt": "2026-10-04T13:59:39Z"
+  },
+  "crew socks": {
+   "ok": true,
+   "checkedAt": "2026-10-04T13:59:48Z"
+  },
+  "beanie": {
+   "ok": true,
+   "checkedAt": "2026-10-04T13:59:57Z"
+  },
+  "hat": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:00:06Z"
+  },
+  "bucket hat": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:00:15Z"
+  },
+  "dad hat": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:00:25Z"
+  },
+  "backpack": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:00:34Z"
+  },
+  "tote bag": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:00:44Z"
+  },
+  "crossbody bag": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:00:52Z"
+  },
+  "wallet": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:01:01Z"
+  },
+  "lanyard": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:01:10Z"
+  },
+  "keychain": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:01:19Z"
+  },
+  "sunglasses": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:01:28Z"
+  },
+  "jewelry": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:01:37Z"
+  },
+  "necklace": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:01:46Z"
+  },
+  "earrings": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:01:55Z"
+  },
+  "choker": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:02:04Z"
+  },
+  "rings": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:02:13Z"
+  },
+  "bracelet": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:02:22Z"
+  },
+  "boots": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:02:31Z"
+  },
+  "combat boots": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:02:40Z"
+  },
+  "platform shoes": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:02:49Z"
+  },
+  "sneakers": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:02:58Z"
+  },
+  "slides": {
+   "ok": false,
+   "call": "predictive",
+   "reason": "network",
+   "detail": "The operation was aborted due to timeout, round 2 of 3",
+   "requestId": null,
+   "checkedAt": "2026-10-04T14:03:19Z"
+  },
+  "funko pop": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:03:27Z"
+  },
+  "funko": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:03:36Z"
+  },
+  "figures": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:03:45Z"
+  },
+  "collectibles": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:03:54Z"
+  },
+  "plush": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:04:03Z"
+  },
+  "squishmallows": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:04:12Z"
+  },
+  "blind box": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:04:21Z"
+  },
+  "posters": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:04:30Z"
+  },
+  "wall art": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:04:39Z"
+  },
+  "mug": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:04:48Z"
+  },
+  "water bottle": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:04:57Z"
+  },
+  "pins": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:05:06Z"
+  },
+  "stickers": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:05:15Z"
+  },
+  "patches": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:05:24Z"
+  },
+  "phone case": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:05:33Z"
+  },
+  "stranger things": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:05:42Z"
+  },
+  "harry potter": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:05:51Z"
+  },
+  "star wars": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:06:00Z"
+  },
+  "marvel": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:06:09Z"
+  },
+  "spider-man": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:06:18Z"
+  },
+  "deadpool": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:06:27Z"
+  },
+  "batman": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:06:36Z"
+  },
+  "dc comics": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:06:45Z"
+  },
+  "disney": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:06:54Z"
+  },
+  "mickey mouse": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:07:03Z"
+  },
+  "stitch": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:07:12Z"
+  },
+  "hello kitty": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:07:21Z"
+  },
+  "sanrio": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:07:30Z"
+  },
+  "my melody": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:07:39Z"
+  },
+  "kuromi": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:07:48Z"
+  },
+  "pokemon": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:07:57Z"
+  },
+  "pikachu": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:08:06Z"
+  },
+  "sailor moon": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:08:15Z"
+  },
+  "demon slayer": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:08:24Z"
+  },
+  "naruto": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:08:33Z"
+  },
+  "one piece": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:08:43Z"
+  },
+  "attack on titan": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:08:51Z"
+  },
+  "studio ghibli": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:09:00Z"
+  },
+  "totoro": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:09:09Z"
+  },
+  "nightmare before christmas": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:09:18Z"
+  },
+  "jack skellington": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:09:27Z"
+  },
+  "beetlejuice": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:09:36Z"
+  },
+  "the simpsons": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:09:45Z"
+  },
+  "spongebob": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:09:55Z"
+  },
+  "rick and morty": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:10:03Z"
+  },
+  "friends": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:10:12Z"
+  },
+  "the office": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:10:21Z"
+  },
+  "squid game": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:10:31Z"
+  },
+  "wednesday": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:10:39Z"
+  },
+  "mean girls": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:10:49Z"
+  },
+  "barbie": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:10:58Z"
+  },
+  "taylor swift": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:11:07Z"
+  },
+  "olivia rodrigo": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:11:16Z"
+  },
+  "sabrina carpenter": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:11:25Z"
+  },
+  "billie eilish": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:11:34Z"
+  },
+  "my chemical romance": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:11:43Z"
+  },
+  "paramore": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:11:52Z"
+  },
+  "fall out boy": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:12:01Z"
+  },
+  "green day": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:12:10Z"
+  },
+  "blink 182": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:12:19Z"
+  },
+  "twenty one pilots": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:12:28Z"
+  },
+  "panic at the disco": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:12:37Z"
+  },
+  "nirvana": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:12:46Z"
+  },
+  "metallica": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:12:55Z"
+  },
+  "ac/dc": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:13:04Z"
+  },
+  "black sabbath": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:13:13Z"
+  },
+  "iron maiden": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:13:22Z"
+  },
+  "slipknot": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:13:31Z"
+  },
+  "linkin park": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:13:40Z"
+  },
+  "system of a down": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:13:49Z"
+  },
+  "korn": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:13:58Z"
+  },
+  "pantera": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:14:07Z"
+  },
+  "guns n roses": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:14:16Z"
+  },
+  "queen": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:14:25Z"
+  },
+  "the rolling stones": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:14:34Z"
+  },
+  "pink floyd": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:14:43Z"
+  },
+  "the beatles": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:14:52Z"
+  },
+  "led zeppelin": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:15:01Z"
+  },
+  "ramones": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:15:10Z"
+  },
+  "misfits": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:15:19Z"
+  },
+  "the cure": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:15:28Z"
+  },
+  "joy division": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:15:37Z"
+  },
+  "depeche mode": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:15:46Z"
+  },
+  "bad omens": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:15:56Z"
+  },
+  "sleep token": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:16:04Z"
+  },
+  "bring me the horizon": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:16:13Z"
+  },
+  "deftones": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:16:23Z"
+  },
+  "tool": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:16:31Z"
+  },
+  "morgan wallen": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:16:40Z"
+  },
+  "zach bryan": {
+   "ok": false,
+   "call": "search",
+   "reason": "status 500",
+   "detail": "expected 200: {\"id\":\"78976212-a21f-4155-ab5c-9d055464e99f\",\"statusCode\":\"InternalServerError\",\"exception\":null,\"requestBody\":null}, round 1 of 3",
+   "requestId": "8f83c003ff730cd33de71a743976163f",
+   "checkedAt": "2026-10-04T14:16:42Z"
+  },
+  "luke combs": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:16:51Z"
+  },
+  "kanye west": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:17:00Z"
+  },
+  "travis scott": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:17:09Z"
+  },
+  "tyler the creator": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:17:18Z"
+  },
+  "drake": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:17:27Z"
+  },
+  "bad bunny": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:17:37Z"
+  },
+  "kpop": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:17:45Z"
+  },
+  "bts": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:17:54Z"
+  },
+  "stray kids": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:18:03Z"
+  },
+  "blackpink": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:18:12Z"
+  },
+  "new arrivals": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:18:21Z"
+  },
+  "sale": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:18:30Z"
+  },
+  "clearance": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:18:39Z"
+  },
+  "gifts": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:18:48Z"
+  },
+  "gifts under 25": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:18:57Z"
+  },
+  "birthday gift": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:19:06Z"
+  },
+  "valentines day": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:19:15Z"
+  },
+  "halloween": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:19:24Z"
+  },
+  "christmas": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:19:33Z"
+  },
+  "holiday": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:19:42Z"
+  },
+  "costume": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:19:51Z"
+  },
+  "cosplay": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:20:00Z"
+  },
+  "goth": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:20:09Z"
+  },
+  "punk": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:20:18Z"
+  },
+  "grunge": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:20:27Z"
+  },
+  "emo": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:20:36Z"
+  },
+  "y2k": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:20:45Z"
+  },
+  "alt fashion": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:20:54Z"
+  },
+  "horror": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:21:03Z"
+  },
+  "skull": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:21:12Z"
+  },
+  "spooky": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:21:21Z"
+  },
+  "vampire": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:21:30Z"
+  },
+  "witch": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:21:39Z"
+  },
+  "butterfly": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:21:48Z"
+  },
+  "cat": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:21:57Z"
+  },
+  "dog": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:22:06Z"
+  },
+  "mushroom": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:22:15Z"
+  },
+  "frog": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:22:24Z"
+  },
+  "rainbow": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:22:33Z"
+  },
+  "plus size": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:22:42Z"
+  },
+  "womens": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:22:51Z"
+  },
+  "mens": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:23:02Z"
+  },
+  "unisex": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:23:11Z"
+  },
+  "kids": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:23:21Z"
+  },
+  "boys": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:23:29Z"
+  },
+  "girls": {
+   "ok": true,
+   "checkedAt": "2026-10-04T14:23:38Z"
+  }
+ }
+}

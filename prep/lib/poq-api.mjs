@@ -91,7 +91,7 @@ export function createApi({ client, env, apiPath }, { maxRpm } = {}) {
       try {
         json = text ? JSON.parse(text) : null;
       } catch {}
-      return { status: res.status, json, text };
+      return { status: res.status, json, text, requestId: res.headers.get('poq-request-id') };
     } catch (e) {
       return { status: 0, json: null, text: String(e.message || e) };
     }
