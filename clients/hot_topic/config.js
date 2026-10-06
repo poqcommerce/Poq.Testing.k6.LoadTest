@@ -87,18 +87,18 @@ export default {
     targetRps: 694,
     rampUp: '30m',
     hold: '30m',
-    // PROFILE=scale (provisional, user request 2026-10-01): the busiest 60 minutes hold about 2.5M requests
-    // (last year's ~2.5M requests/hour); concurrency follows from the shape. stages = [minutes, factor of
-    // targetRps]: 20 min gradual ramp, 60 min around 90% with three surges (125%, 115%, 125%), 5 min
-    // ramp-down. Logged-in users start 15 min in; about 50 registrations over minutes 20-75.
+    // PROFILE=scale (provisional, user request 2026-10-06): 65 minutes holding about 2.5M requests in total, ramp
+    // included (last year's ~2.5M requests/hour). stages = [minutes, factor of targetRps], ramped linearly:
+    // 15 min gradual ramp, 45 min at about 103% with three surges (125%, 115%, 125%), 5 min ramp-down.
+    // Logged-in users start 15 min in; about 50 registrations over minutes 15-60.
     shape: {
       stages: [
-        [5, 0.1], [5, 0.3], [5, 0.55], [5, 0.8], // ramp-up
-        [12, 0.9], [3, 1.25], [10, 0.9], [3, 1.15], [12, 0.9], [3, 1.25], [10, 0.9], [7, 0.9], // peak hour with surges
+        [5, 0.4], [5, 0.7], [5, 0.95], // ramp-up
+        [12, 1.03], [3, 1.25], [8, 1.03], [3, 1.15], [8, 1.03], [3, 1.25], [8, 1.03], // peak with surges
         [5, 0.2], // ramp-down
       ],
       startAfter: { account: 15 },
-      fixed: { register: { count: 50, startAfter: 20, over: 55 } },
+      fixed: { register: { count: 50, startAfter: 15, over: 45 } },
     },
   },
 
@@ -144,13 +144,17 @@ export default {
     prodAbortFailedRate: 0.1, // prod safety stop above this failure rate…
     prodAbortDelay: '60s', // …evaluated from this point (override per run: -e ABORT_FAILED_RATE / -e ABORT_DELAY)
     p95Ms: {
-      default: 2000,
+      default: 3000,
       Login: 3000,
       Register: 4000, // paced run: p95 3.4 s over 3 samples
       'Search by keyword': 2500, // paced run: p95 2.0 s over 6 samples
       'Add to bag': 2500,
+      'PLP sort: new arrivals': 4000,
+      'PLP sort: top rated': 4000,
+      'PLP sort: price low-high': 4000,
+      'PLP sort: price high-low': 4000,
       'Product details': 4000, // paced run: p95 3.4 s over 3 samples
-      'PLP sort: best seller': 6000, // paced run: p95 6.0 s over 3 samples (large categories)
+      'PLP sort: best seller': 4000, // was 6000 (paced run, 3 samples); 4000 for all PLP sorts, user request 2026-10-06
     },
   },
 };

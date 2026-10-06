@@ -18,10 +18,10 @@ import { NAMES } from './endpoints.js';
 const test = createTest(client, {
   resolve: (p) => import.meta.resolve(p),
   scenarios: {
-    browser: { requestsPerIteration: 34, estimatedIterationSeconds: 40 },
-    shopper: { requestsPerIteration: 34, estimatedIterationSeconds: 40 },
-    // Measured against a local mock (39 and 12 requests); re-check after the first real run.
-    account: { requestsPerIteration: 39, estimatedIterationSeconds: 50 },
+    browser: { requestsPerIteration: 35, estimatedIterationSeconds: 40 },
+    shopper: { requestsPerIteration: 36, estimatedIterationSeconds: 40 },
+    // Measured on the prod warm-up (2026-10-05): 35 / 36 / 42 / 12 requests per iteration.
+    account: { requestsPerIteration: 42, estimatedIterationSeconds: 50 },
     register: { requestsPerIteration: 12, estimatedIterationSeconds: 20 },
   },
   endpointNames: ht.endpointNames,
