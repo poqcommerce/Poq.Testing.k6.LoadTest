@@ -2,7 +2,7 @@
 # Hot Topic: one command for the sanity, warm-up and load (scale) runs.
 # It only builds the plain `k6 run` command (shown before it runs) and names the output files.
 #
-#   clients/hot_topic/scripts/run.sh <sanity|warmup|load> [--env prod|staging] [--max-data-age <hours>] [--save-output] [--prom] [--yes] [--dry-run] [-- extra k6 args]
+#   clients/hot_topic/scripts/run.sh <sanity|warmup|load> --env <prod|staging> [--max-data-age <hours>] [--save-output] [--prom] [--yes] [--dry-run] [-- extra k6 args]
 #
 #   sanity   1% of the target, 5 min,  about 2,000 requests   (abort check after 60 s)
 #   warmup   10% of the target, 15 min, about 60,000 requests (abort check after 90 s)
@@ -23,7 +23,7 @@ cd "$(dirname "$0")/../../.."  # the project root, wherever the script is starte
 
 usage() { awk 'NR>1 && /^#/ {sub(/^# ?/, ""); print; next} NR>1 {exit}' "$0"; exit "${1:-1}"; }
 
-ENV_NAME=prod
+ENV_NAME=""  # no default: the target is always chosen explicitly
 MAX_AGE="${MAX_DATA_AGE_HOURS:-}"
 SAVE_OUTPUT=false
 PROM=false
@@ -49,11 +49,12 @@ while [ $# -gt 0 ]; do
   shift
 done
 [ -n "$CHOICE" ] || usage
+case "$ENV_NAME" in prod|staging) ;; "") echo "--env is required (prod or staging)" >&2; usage ;; *) echo "--env must be prod or staging, got: $ENV_NAME" >&2; exit 1 ;; esac
 
 case "$CHOICE" in
-  sanity) K6_PROFILE=sanity; ABORT_DELAY=60s; SIZE="about 2,000 requests over 5 min" ;;
-  warmup) K6_PROFILE=warmup; ABORT_DELAY=90s; SIZE="about 60,000 requests over 15 min" ;;
-  load|scale) K6_PROFILE=scale; ABORT_DELAY=3m; SIZE="about 2.5M requests over 65 min (up to ~1,090 req/s in a surge)" ;;
+  sanity) K6_PROFILE=sanity; ABORT_DELAY=60s; SIZE="about 2,000 requests over 5 min"; REGISTERS=0 ;;
+  warmup) K6_PROFILE=warmup; ABORT_DELAY=90s; SIZE="about 60,000 requests over 15 min"; REGISTERS=5 ;;
+  load|scale) K6_PROFILE=scale; ABORT_DELAY=3m; SIZE="about 2.5M requests over 65 min (up to ~1,090 req/s in a surge)"; REGISTERS=50 ;;
 esac
 
 case "$MAX_AGE" in ''|*[!0-9.]*) [ -z "$MAX_AGE" ] || { echo "--max-data-age must be a number of hours, got: $MAX_AGE" >&2; exit 1; } ;; esac
@@ -89,6 +90,8 @@ export K6_WEB_DASHBOARD_PORT=5665
 export K6_WEB_DASHBOARD_EXPORT="${RUN_DIR}/report.html"
 
 echo "Hot Topic ${CHOICE} on ${ENV_NAME}: ${SIZE}"
+# warmup and scale add the fixed-count register scenario unless SCENARIOS is passed after --
+[ "$REGISTERS" -gt 0 ] && echo "Creates about ${REGISTERS} real accounts (register scenario) that cannot be deleted."
 echo "Command:"
 printf '  K6_WEB_DASHBOARD=true K6_WEB_DASHBOARD_PORT=5665 K6_WEB_DASHBOARD_EXPORT=%q \\\n' "$K6_WEB_DASHBOARD_EXPORT"
 $PROM && printf '  K6_PROMETHEUS_RW_SERVER_URL=%q \\\n' "$K6_PROMETHEUS_RW_SERVER_URL"
@@ -99,6 +102,7 @@ if $DRY_RUN; then echo "(dry run: nothing was sent)"; exit 0; fi
 
 if [ "$ENV_NAME" = prod ] && ! $ASSUME_YES; then
   echo "This sends real traffic to PROD. The products must be validated within the data age limit."
+  [ "$REGISTERS" -gt 0 ] && echo "It also creates about ${REGISTERS} accounts (and loyalty profiles) on the target client."
   read -r -p "Type PROD to continue: " ANSWER
   [ "$ANSWER" = PROD ] || { echo "Cancelled."; exit 1; }
 fi

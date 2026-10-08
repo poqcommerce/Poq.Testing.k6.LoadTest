@@ -9,7 +9,7 @@
 //     falling back to the next size on a stock rejection (412 / InsufficientQuantity / noStock).
 // Only bundles whose every entry was added ("ok") are written to "bundles".
 //
-//   node prep/validate-gift-bundles.mjs <client> --env <dev|staging|prod> [--allow-prod] [--input file] [--max-rpm n]
+//   node prep/validate-gift-bundles.mjs <client> --env <dev|staging|prod> [--allow-prod] [--input file] [--max-rpm n]  (--max-rpm is required with --env prod)
 
 import { parseArgs, loadClient, readIds, createApi, sleep, writeData, nowIso } from './lib/poq-api.mjs';
 

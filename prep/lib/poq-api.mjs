@@ -15,7 +15,12 @@ export function parseArgs(argv, valueFlags) {
   for (let i = 0; i < argv.length; i++) {
     const a = argv[i];
     if (!a.startsWith('--')) positional.push(a);
-    else if (valueFlags.includes(a)) opts[a.slice(2)] = argv[++i];
+    else if (valueFlags.includes(a)) {
+      // `--max-rpm --allow-prod` must not swallow the next flag as the value.
+      const v = argv[++i];
+      if (v === undefined || v.startsWith('--')) throw new Error(`${a} needs a value`);
+      opts[a.slice(2)] = v;
+    }
     else opts[a.slice(2)] = true;
   }
   return { positional, opts };
@@ -30,7 +35,14 @@ export async function loadClient(name, envName, { allowProd }) {
   const env = client.environments[envName];
   if (!env) throw new Error(`Client "${name}" has no "${envName}" environment`);
   const apiPath = process.env.API_PATH || env.apiPath || client.apiPath;
-  return { client, env: { ...env, baseUrl: process.env.BASE_URL || env.baseUrl }, envName, apiPath };
+  // BASE_URL (a local mock) must not reach the prod host under a non-prod --env, which would skip --allow-prod.
+  const base = process.env.BASE_URL;
+  const origin = (u) => u.toLowerCase().replace(/\/+$/, '');
+  const prod = client.environments.prod;
+  if (base && envName !== 'prod' && prod && origin(base) === origin(prod.baseUrl)) {
+    throw new Error(`BASE_URL ${base} is ${name}'s prod host; use --env prod --allow-prod instead`);
+  }
+  return { client, env: { ...env, baseUrl: base || env.baseUrl }, envName, apiPath };
 }
 
 export function readIds(path) {
@@ -52,9 +64,12 @@ export const between = ([min, max]) => min + Math.random() * (max - min);
 // An API session = one cart. client.session:
 //   'guestToken' (Gen-3): a guest token per session (the guest cart);
 //   'device' (Gen-2): just a new poq-user-id (the device's cart), no token.
-// maxRpm caps every request this process sends (all sessions share the limiter).
-export function createApi({ client, env, apiPath }, { maxRpm } = {}) {
+// maxRpm caps every request this process sends (all sessions share the limiter). It is required on prod;
+// a value that is not a positive number is refused, as NaN or 0 would silently remove the cap.
+export function createApi({ client, env, envName, apiPath }, { maxRpm } = {}) {
   const rules = { session: client.session || 'guestToken', addToCart: 'full', success: 'quantityAdded', ...client.validator };
+  if (maxRpm !== undefined && !(maxRpm > 0 && Number.isFinite(maxRpm))) throw new Error(`--max-rpm must be a positive number (got "${maxRpm}")`);
+  if (envName === 'prod' && maxRpm === undefined) throw new Error('--max-rpm is required against prod');
   const minInterval = maxRpm ? 60 / maxRpm : 0;
   let last = 0;
   let requests = 0;
