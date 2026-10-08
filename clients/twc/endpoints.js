@@ -15,7 +15,7 @@ export const NAMES = {
   giftBoxPdp: 'Gift box: bundle PDP',
   giftBoxBulkAdd: 'Gift box: bulk add',
   giftBoxEntryAdd: 'Gift box: add entry',
-  loginNoAccount: 'Login: no account for VU',
+  loginNoAccount: 'Login: no account',
   authUrl: 'Login: authorization URL',
   authorizePre: 'Login: authorize (pre-login)',
   csrf: 'Login: CSRF',

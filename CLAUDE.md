@@ -82,7 +82,7 @@ prep/              Node validators and reports (no dependencies)
 - **Identity:**
   - `session: 'guestToken'` (Gen-3) gives a new guest session each iteration.
   - `session: 'device'` (Gen-2) gives one persistent `poq-user-id` per VU.
-  - Logged-in scenarios map VU *n* → account *n*. k6 has no shared state, so a VU without an account falls back to the guest journey and is counted as such.
+  - Logged-in scenarios take accounts in turn by iteration number (`exec.scenario.iterationInTest % accounts.length`); k6 VU ids are global across scenarios, so they can't index the list. Keep the scenario's `maxVUs` below the account count so no two live sessions share an account. An empty list falls back to the guest journey and is counted as such.
 
 ## Conventions
 

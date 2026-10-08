@@ -49,11 +49,13 @@ export function guestShopper(s, data) {
 // ---- logged-in shopper: one exclusive account per VU; full session ending in logout ----
 
 export function loggedInShopper(s, data) {
-  // VU n always uses account n, so no two VUs share an account. A VU without one
-  // (more VUs than accounts) runs the guest journey instead; counted in failures.csv.
-  const acct = data.accounts[exec.vu.idInTest - 1];
+  // Accounts are taken in turn by iteration number, as in Hot Topic. k6 VU ids are global, so in a mixed run the
+  // logged-in VUs started beyond the list (ids 77+ on a prod load run with 20 accounts) and all ran as guests.
+  // Two iterations share an account only when they are a whole list apart, long after the first has logged out
+  // (the scenario's maxVUs stays below the list size: 15 vs 20 on prod load). An empty list runs the guest journey.
+  const acct = data.accounts[exec.scenario.iterationInTest % data.accounts.length];
   if (!acct) {
-    correlationFailure(s, twc.NAMES.loginNoAccount, `account #${exec.vu.idInTest} (only ${data.accounts.length} available)`);
+    correlationFailure(s, twc.NAMES.loginNoAccount, 'account (the account list is empty)');
     return guestShopper(s, data);
   }
 

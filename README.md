@@ -196,7 +196,7 @@ node prep/validate-accounts.mjs hot_topic --env staging                       # 
 **Accounts** for logged-in scenarios are in `clients/<client>/data/accounts_<env>.json`, as `[{ "email", "password" }]`.
 
 - These files are **gitignored** and never committed or logged.
-- VU *n* always uses account *n*, so no two sessions share an account; k6 has no shared state for an account pool. A VU with no matching account runs the guest journey instead, and is counted as a correlation failure in `failures.csv`.
+- Accounts are taken in turn by iteration number, so two sessions share an account only when they are a whole list apart. Keep the logged-in scenario's `maxVUs` (shown by `k6 inspect`) below the number of accounts. With an empty list the logged-in scenario runs the guest journey instead, counted as a correlation failure in `failures.csv`.
 
 **Fetched fresh every run** in `setup()`: categories (`/shop`).
 
