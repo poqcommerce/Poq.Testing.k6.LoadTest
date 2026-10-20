@@ -110,11 +110,11 @@ metrics to Prometheus and view them in Grafana. Requests carry a `name` tag, so 
 1. Run Prometheus and Grafana once, on the machine that runs k6, e.g. with Docker Compose. Prometheus needs
    `--web.enable-remote-write-receiver`; bind both ports to `127.0.0.1` (ports 9090 and 3000). In Grafana add a Prometheus
    data source (`http://prometheus:9090` when both run in Compose) and import the "k6 Prometheus" dashboard (ID 19665).
-2. Add k6's own Prometheus output to the run. Dropping the `url` system tag keeps the label count low:
+2. Add k6's own Prometheus output to the run. Dropping the `url` system tag keeps the label count low; keep `check`, or the dashboard's checks list stays empty:
    ```bash
    K6_PROMETHEUS_RW_SERVER_URL=http://localhost:9090/api/v1/write K6_PROMETHEUS_RW_TREND_STATS="avg,p(95),p(99),max" \
    k6 run -o experimental-prometheus-rw --tag testid=<run name> \
-     --system-tags=proto,subproto,status,method,scenario,expected_response,error,error_code,tls_version,group ...
+     --system-tags=proto,subproto,status,method,scenario,expected_response,error,error_code,tls_version,group,check ...
    ```
 3. Open Grafana, pick the `testid` in the dashboard and set the time range to the last 15 minutes with a 5 s refresh.
 
