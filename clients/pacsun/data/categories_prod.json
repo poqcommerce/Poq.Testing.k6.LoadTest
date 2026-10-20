@@ -1,0 +1,588 @@
+{
+ "client": "pacsun",
+ "env": "prod",
+ "apiPath": "pacsun-perf",
+ "generatedAt": "2026-10-15T16:31:04Z",
+ "checked": true,
+ "sortOrdersChecked": [
+  "PLP sort: newest"
+ ],
+ "minItems": 7,
+ "validIds": [
+  "mens",
+  "mens-pants",
+  "mens-denim-shop-all",
+  "mens-joggers",
+  "mens-shorts",
+  "mens-swim",
+  "mens-boardshorts",
+  "mens-accessories",
+  "mens-hats-and-beanies",
+  "mens-sunglasses",
+  "mens-socks-and-boxers",
+  "mens-bags-and-backpacks",
+  "mens-belts-and-wallets",
+  "mens-cologne",
+  "womens",
+  "womens-dresses",
+  "womens-hoodies-unisex",
+  "womens-outerwear",
+  "womens-activewear",
+  "womens-swimwear",
+  "womens_accessories",
+  "women-perfumes",
+  "womens-jewelry",
+  "womens-hair-accessories",
+  "womens-sungalsses",
+  "womens-hats",
+  "womens-beanies",
+  "tights-socks",
+  "scarves",
+  "tech-accessories",
+  "womens-shoes"
+ ],
+ "categories": [
+  {
+   "id": "mens",
+   "title": "View All Men's",
+   "categoryUrl": "",
+   "filterKey": "",
+   "filterValue": "",
+   "parentId": "mens-poqParentCategoryId",
+   "leaf": true,
+   "check": {
+    "ok": true,
+    "items": 31314,
+    "confirmed": true
+   },
+   "checkedAt": "2026-10-15T16:32:35Z"
+  },
+  {
+   "id": "mens-pants",
+   "title": "View All Pants",
+   "categoryUrl": "",
+   "filterKey": "",
+   "filterValue": "",
+   "parentId": "mens-pants-poqParentCategoryId",
+   "leaf": true,
+   "check": {
+    "ok": true,
+    "items": 2346,
+    "confirmed": true
+   },
+   "checkedAt": "2026-10-15T16:32:38Z"
+  },
+  {
+   "id": "mens-denim-shop-all",
+   "title": "Jeans",
+   "categoryUrl": "",
+   "filterKey": "",
+   "filterValue": "",
+   "parentId": "mens-pants-poqParentCategoryId",
+   "leaf": true,
+   "check": {
+    "ok": true,
+    "items": 902,
+    "confirmed": true
+   },
+   "checkedAt": "2026-10-15T16:32:41Z"
+  },
+  {
+   "id": "mens-joggers",
+   "title": "Joggers",
+   "categoryUrl": "",
+   "filterKey": "",
+   "filterValue": "",
+   "parentId": "mens-pants-poqParentCategoryId",
+   "leaf": true,
+   "check": {
+    "ok": true,
+    "items": 215,
+    "confirmed": true
+   },
+   "checkedAt": "2026-10-15T16:32:45Z"
+  },
+  {
+   "id": "mens-pants-poqParentCategoryId",
+   "title": "Pants",
+   "categoryUrl": "",
+   "filterKey": "",
+   "filterValue": "",
+   "parentId": "mens-poqParentCategoryId",
+   "leaf": false
+  },
+  {
+   "id": "mens-shorts",
+   "title": "Shorts",
+   "categoryUrl": "",
+   "filterKey": "",
+   "filterValue": "",
+   "parentId": "mens-poqParentCategoryId",
+   "leaf": true,
+   "check": {
+    "ok": true,
+    "items": 1669,
+    "confirmed": true
+   },
+   "checkedAt": "2026-10-15T16:32:47Z"
+  },
+  {
+   "id": "mens-swim",
+   "title": "View All Swim",
+   "categoryUrl": "",
+   "filterKey": "",
+   "filterValue": "",
+   "parentId": "mens-swim-poqParentCategoryId",
+   "leaf": true,
+   "check": {
+    "ok": true,
+    "items": 1415,
+    "confirmed": true
+   },
+   "checkedAt": "2026-10-15T16:32:50Z"
+  },
+  {
+   "id": "mens-swim-trunks",
+   "title": "Swim Trunks",
+   "categoryUrl": "",
+   "filterKey": "",
+   "filterValue": "",
+   "parentId": "mens-swim-poqParentCategoryId",
+   "leaf": true,
+   "check": {
+    "ok": false,
+    "reason": "status 0: plain"
+   },
+   "checkedAt": "2026-10-15T16:31:04Z"
+  },
+  {
+   "id": "mens-boardshorts",
+   "title": "Boardshorts",
+   "categoryUrl": "",
+   "filterKey": "",
+   "filterValue": "",
+   "parentId": "mens-swim-poqParentCategoryId",
+   "leaf": true,
+   "check": {
+    "ok": true,
+    "items": 305,
+    "confirmed": true
+   },
+   "checkedAt": "2026-10-15T16:32:53Z"
+  },
+  {
+   "id": "mens-swim-poqParentCategoryId",
+   "title": "Swim",
+   "categoryUrl": "",
+   "filterKey": "",
+   "filterValue": "",
+   "parentId": "mens-poqParentCategoryId",
+   "leaf": false
+  },
+  {
+   "id": "mens-accessories",
+   "title": "View All Accessories",
+   "categoryUrl": "",
+   "filterKey": "",
+   "filterValue": "",
+   "parentId": "mens-accessories-poqParentCategoryId",
+   "leaf": true,
+   "check": {
+    "ok": true,
+    "items": 3548,
+    "confirmed": true
+   },
+   "checkedAt": "2026-10-15T16:32:56Z"
+  },
+  {
+   "id": "mens-hats-and-beanies",
+   "title": "Hats & Beanies",
+   "categoryUrl": "",
+   "filterKey": "",
+   "filterValue": "",
+   "parentId": "mens-accessories-poqParentCategoryId",
+   "leaf": true,
+   "check": {
+    "ok": true,
+    "items": 1835,
+    "confirmed": true
+   },
+   "checkedAt": "2026-10-15T16:32:59Z"
+  },
+  {
+   "id": "mens-sunglasses",
+   "title": "Sunglasses",
+   "categoryUrl": "",
+   "filterKey": "",
+   "filterValue": "",
+   "parentId": "mens-accessories-poqParentCategoryId",
+   "leaf": true,
+   "check": {
+    "ok": true,
+    "items": 156,
+    "confirmed": true
+   },
+   "checkedAt": "2026-10-15T16:33:02Z"
+  },
+  {
+   "id": "mens-socks-and-boxers",
+   "title": "Socks",
+   "categoryUrl": "",
+   "filterKey": "",
+   "filterValue": "",
+   "parentId": "mens-accessories-poqParentCategoryId",
+   "leaf": true,
+   "check": {
+    "ok": true,
+    "items": 357,
+    "confirmed": true
+   },
+   "checkedAt": "2026-10-15T16:33:05Z"
+  },
+  {
+   "id": "mens-bags-and-backpacks",
+   "title": "Backpacks & Sling Bags",
+   "categoryUrl": "",
+   "filterKey": "",
+   "filterValue": "",
+   "parentId": "mens-accessories-poqParentCategoryId",
+   "leaf": true,
+   "check": {
+    "ok": true,
+    "items": 266,
+    "confirmed": true
+   },
+   "checkedAt": "2026-10-15T16:33:08Z"
+  },
+  {
+   "id": "mens-belts-and-wallets",
+   "title": "Wallet Chains, Wallets & Belts",
+   "categoryUrl": "",
+   "filterKey": "",
+   "filterValue": "",
+   "parentId": "mens-accessories-poqParentCategoryId",
+   "leaf": true,
+   "check": {
+    "ok": true,
+    "items": 52,
+    "confirmed": true
+   },
+   "checkedAt": "2026-10-15T16:33:11Z"
+  },
+  {
+   "id": "mens-cologne",
+   "title": "Cologne",
+   "categoryUrl": "",
+   "filterKey": "",
+   "filterValue": "",
+   "parentId": "mens-accessories-poqParentCategoryId",
+   "leaf": true,
+   "check": {
+    "ok": true,
+    "items": 7,
+    "confirmed": true
+   },
+   "checkedAt": "2026-10-15T16:33:14Z"
+  },
+  {
+   "id": "mens-accessories-poqParentCategoryId",
+   "title": "Accessories",
+   "categoryUrl": "",
+   "filterKey": "",
+   "filterValue": "",
+   "parentId": "mens-poqParentCategoryId",
+   "leaf": false
+  },
+  {
+   "id": "mens-poqParentCategoryId",
+   "title": "Men's",
+   "categoryUrl": "",
+   "filterKey": "",
+   "filterValue": "",
+   "parentId": null,
+   "leaf": false
+  },
+  {
+   "id": "womens",
+   "title": "View All Women's",
+   "categoryUrl": "",
+   "filterKey": "",
+   "filterValue": "",
+   "parentId": "womens-poqParentCategoryId",
+   "leaf": true,
+   "check": {
+    "ok": true,
+    "items": 45675,
+    "confirmed": true
+   },
+   "checkedAt": "2026-10-15T16:33:18Z"
+  },
+  {
+   "id": "womens-dresses",
+   "title": "Dresses & Rompers",
+   "categoryUrl": "",
+   "filterKey": "",
+   "filterValue": "",
+   "parentId": "womens-poqParentCategoryId",
+   "leaf": true,
+   "check": {
+    "ok": true,
+    "items": 2037,
+    "confirmed": true
+   },
+   "checkedAt": "2026-10-15T16:33:20Z"
+  },
+  {
+   "id": "womens-hoodies-unisex",
+   "title": "Hoodies & Sweatshirts",
+   "categoryUrl": "",
+   "filterKey": "",
+   "filterValue": "",
+   "parentId": "womens-poqParentCategoryId",
+   "leaf": true,
+   "check": {
+    "ok": true,
+    "items": 3321,
+    "confirmed": true
+   },
+   "checkedAt": "2026-10-15T16:33:24Z"
+  },
+  {
+   "id": "womens-outerwear",
+   "title": "Jackets & Coats",
+   "categoryUrl": "",
+   "filterKey": "",
+   "filterValue": "",
+   "parentId": "womens-poqParentCategoryId",
+   "leaf": true,
+   "check": {
+    "ok": true,
+    "items": 943,
+    "confirmed": true
+   },
+   "checkedAt": "2026-10-15T16:33:26Z"
+  },
+  {
+   "id": "womens-activewear",
+   "title": "Activewear",
+   "categoryUrl": "",
+   "filterKey": "",
+   "filterValue": "",
+   "parentId": "womens-poqParentCategoryId",
+   "leaf": true,
+   "check": {
+    "ok": true,
+    "items": 1272,
+    "confirmed": true
+   },
+   "checkedAt": "2026-10-15T16:33:30Z"
+  },
+  {
+   "id": "womens-swimwear",
+   "title": "Bikinis",
+   "categoryUrl": "",
+   "filterKey": "",
+   "filterValue": "",
+   "parentId": "womens-poqParentCategoryId",
+   "leaf": true,
+   "check": {
+    "ok": true,
+    "items": 8554,
+    "confirmed": true
+   },
+   "checkedAt": "2026-10-15T16:33:32Z"
+  },
+  {
+   "id": "womens_accessories",
+   "title": "View All Accessories",
+   "categoryUrl": "",
+   "filterKey": "",
+   "filterValue": "",
+   "parentId": "womens_accessories-poqParentCategoryId",
+   "leaf": true,
+   "check": {
+    "ok": true,
+    "items": 4759,
+    "confirmed": true
+   },
+   "checkedAt": "2026-10-15T16:33:35Z"
+  },
+  {
+   "id": "women-perfumes",
+   "title": "Fragrances",
+   "categoryUrl": "",
+   "filterKey": "",
+   "filterValue": "",
+   "parentId": "womens_accessories-poqParentCategoryId",
+   "leaf": true,
+   "check": {
+    "ok": true,
+    "items": 12,
+    "confirmed": true
+   },
+   "checkedAt": "2026-10-15T16:33:38Z"
+  },
+  {
+   "id": "womens-jewelry",
+   "title": "Jewelry & Watches",
+   "categoryUrl": "",
+   "filterKey": "",
+   "filterValue": "",
+   "parentId": "womens_accessories-poqParentCategoryId",
+   "leaf": true,
+   "check": {
+    "ok": true,
+    "items": 1418,
+    "confirmed": true
+   },
+   "checkedAt": "2026-10-15T16:33:41Z"
+  },
+  {
+   "id": "womens-hair-accessories",
+   "title": "Hair Accessories",
+   "categoryUrl": "",
+   "filterKey": "",
+   "filterValue": "",
+   "parentId": "womens_accessories-poqParentCategoryId",
+   "leaf": true,
+   "check": {
+    "ok": true,
+    "items": 350,
+    "confirmed": true
+   },
+   "checkedAt": "2026-10-15T16:33:44Z"
+  },
+  {
+   "id": "womens-sungalsses",
+   "title": "Sunglasses",
+   "categoryUrl": "",
+   "filterKey": "",
+   "filterValue": "",
+   "parentId": "womens_accessories-poqParentCategoryId",
+   "leaf": true,
+   "check": {
+    "ok": true,
+    "items": 202,
+    "confirmed": true
+   },
+   "checkedAt": "2026-10-15T16:33:47Z"
+  },
+  {
+   "id": "womens-hats",
+   "title": "View All Hats & Beanies",
+   "categoryUrl": "",
+   "filterKey": "",
+   "filterValue": "",
+   "parentId": "womens-hats-poqParentCategoryId",
+   "leaf": true,
+   "check": {
+    "ok": true,
+    "items": 692,
+    "confirmed": true
+   },
+   "checkedAt": "2026-10-15T16:33:50Z"
+  },
+  {
+   "id": "womens-beanies",
+   "title": "Beanies",
+   "categoryUrl": "",
+   "filterKey": "",
+   "filterValue": "",
+   "parentId": "womens-hats-poqParentCategoryId",
+   "leaf": true,
+   "check": {
+    "ok": true,
+    "items": 49,
+    "confirmed": true
+   },
+   "checkedAt": "2026-10-15T16:33:53Z"
+  },
+  {
+   "id": "womens-hats-poqParentCategoryId",
+   "title": "Hats & Beanies",
+   "categoryUrl": "",
+   "filterKey": "",
+   "filterValue": "",
+   "parentId": "womens_accessories-poqParentCategoryId",
+   "leaf": false
+  },
+  {
+   "id": "tights-socks",
+   "title": "Socks & Tights",
+   "categoryUrl": "",
+   "filterKey": "",
+   "filterValue": "",
+   "parentId": "womens_accessories-poqParentCategoryId",
+   "leaf": true,
+   "check": {
+    "ok": true,
+    "items": 599,
+    "confirmed": true
+   },
+   "checkedAt": "2026-10-15T16:33:56Z"
+  },
+  {
+   "id": "scarves",
+   "title": "Scarves & Gloves",
+   "categoryUrl": "",
+   "filterKey": "",
+   "filterValue": "",
+   "parentId": "womens_accessories-poqParentCategoryId",
+   "leaf": true,
+   "check": {
+    "ok": true,
+    "items": 166,
+    "confirmed": true
+   },
+   "checkedAt": "2026-10-15T16:33:59Z"
+  },
+  {
+   "id": "tech-accessories",
+   "title": "Tech Accessories",
+   "categoryUrl": "",
+   "filterKey": "",
+   "filterValue": "",
+   "parentId": "womens_accessories-poqParentCategoryId",
+   "leaf": true,
+   "check": {
+    "ok": true,
+    "items": 810,
+    "confirmed": true
+   },
+   "checkedAt": "2026-10-15T16:34:02Z"
+  },
+  {
+   "id": "womens_accessories-poqParentCategoryId",
+   "title": "Accessories",
+   "categoryUrl": "",
+   "filterKey": "",
+   "filterValue": "",
+   "parentId": "womens-poqParentCategoryId",
+   "leaf": false
+  },
+  {
+   "id": "womens-shoes",
+   "title": "Shoes & Sneakers",
+   "categoryUrl": "",
+   "filterKey": "",
+   "filterValue": "",
+   "parentId": "womens-poqParentCategoryId",
+   "leaf": true,
+   "check": {
+    "ok": true,
+    "items": 2477,
+    "confirmed": true
+   },
+   "checkedAt": "2026-10-15T16:34:06Z"
+  },
+  {
+   "id": "womens-poqParentCategoryId",
+   "title": "Women's",
+   "categoryUrl": "",
+   "filterKey": "",
+   "filterValue": "",
+   "parentId": null,
+   "leaf": false
+  }
+ ]
+}

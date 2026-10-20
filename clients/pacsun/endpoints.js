@@ -4,6 +4,9 @@
 // Android dev app on 2026-09-30.
 
 import { request, correlationFailure } from '../../lib/http.js';
+import { randomItem } from '../../lib/data.js';
+import { newPerson, registerBody } from './registration.js';
+import client from './config.js';
 import { productRefs } from '../../lib/platform/product.js';
 import { NAMES as CART } from '../../lib/platform/cart.js';
 import { NAMES as WISHLIST } from '../../lib/platform/wishlist.js';
@@ -19,12 +22,118 @@ export const NAMES = {
   storesByZip: 'Stores by ZIP code',
   webViewCss: 'Web view assets: CSS',
   webViewJs: 'Web view assets: JS',
+  register: 'Register',
+  loyaltyRewards: 'Loyalty rewards',
+  login: 'Login',
+  voucher: 'Apply voucher',
+  voucherRemove: 'Remove voucher',
 };
 
 const V3 = { 'Accept-Version': 'v3' };
 const inBag = (sku) => (j) => Array.isArray(j.cartItems) && j.cartItems.some((i) => String(i.variantId) === String(sku));
 
+// ---- registration ----
+
+// POST /account/register with the guest token, as the app's sign-up form does. Creates a real account
+// (the API cannot delete it); the scenario is opt-in. The app is logged in as the new user afterwards,
+// so the response's token replaces the guest token for the later steps. Returns the new account's
+// { email, password } or null. Auth call: bodies are never logged.
+export function register(s) {
+  const p = newPerson(client.registration);
+  const { ok, json } = request(s, {
+    name: NAMES.register,
+    method: 'POST',
+    path: '/account/register',
+    body: registerBody(p),
+    checks: { 'has accessToken': (j) => j.accessToken }, // the response is the new account's logged-in session
+    sensitive: true,
+  });
+  if (!ok) return null;
+  // Assumed to be the guest-token shape ({ accessToken, refreshToken }): not yet confirmed from a capture.
+  if (json && json.accessToken) {
+    s.token = json.accessToken;
+    s.refreshToken = json.refreshToken || s.refreshToken;
+    s.loggedIn = true;
+  }
+  return { email: p.email, password: p.password };
+}
+
+// ---- login ----
+
+// POST /account/login with an existing test account, as the app's sign-in form does. Same response
+// shape as Hot Topic's login ({ accessToken, refreshToken }); not yet confirmed from a Pacsun response
+// body. The app flips poq-slot-conditions to loggedIn=true, and its next call is the account content.
+// Auth call: bodies are never logged. Returns true when the session is logged in.
+export function login(s, acct) {
+  const { json } = request(s, {
+    name: NAMES.login,
+    method: 'POST',
+    path: '/account/login',
+    body: { password: acct.password, username: acct.email },
+    checks: { 'has accessToken': (j) => j.accessToken },
+    sensitive: true,
+  });
+  if (!json || !json.accessToken) {
+    correlationFailure(s, NAMES.login, 'accessToken');
+    return false;
+  }
+  s.token = json.accessToken;
+  s.refreshToken = json.refreshToken || s.refreshToken;
+  s.loggedIn = true;
+  s.headers['poq-slot-conditions'] = 'loggedIn=true&notifications=true&inStore=false';
+  return true;
+}
+
+// ---- loyalty ----
+
+// Rewards tab of the logged-in app (GET /loyalty/rewards). Only after register: it needs the new
+// account's token, so a guest session is never sent here. The app flips poq-slot-conditions to loggedIn=true.
+export function loyaltyRewards(s) {
+  if (!s.loggedIn) return correlationFailure(s, NAMES.loyaltyRewards, 'logged-in token from register');
+  request(s, {
+    name: NAMES.loyaltyRewards,
+    path: '/loyalty/rewards',
+    headers: { 'poq-slot-conditions': 'loggedIn=true&notifications=true&inStore=false' },
+    sensitive: true, // customer rewards: success bodies stay out of the failure log
+  });
+}
+
 // ---- bag ----
+
+// Applies one of the environment's voucher codes to the bag (the app's promo field: POST /cart/vouchers with
+// {code}). Returns the applied voucher { id, code } from the response, or null (none configured, or the apply
+// failed: nothing to remove). Only shown to logged-in sessions, as in the app.
+export function applyVoucher(s) {
+  const codes = s.cfg.env.voucherCodes || client.voucherCodes;
+  if (!codes.length) return null;
+  const code = randomItem(codes);
+  const find = (j) => (j && Array.isArray(j.vouchers) ? j.vouchers.find((v) => v.code === code && v.status === 'Applied') : null);
+  const { json } = request(s, {
+    name: NAMES.voucher,
+    method: 'POST',
+    path: '/cart/vouchers',
+    query: { 'slot-content-id': 'cart' },
+    body: { code },
+    checks: { 'voucher applied': (j) => Boolean(find(j)) },
+    data: { voucher: code },
+  });
+  const voucher = find(json);
+  return voucher && voucher.id ? voucher : null;
+}
+
+// Removes a voucher from the bag: DELETE /cart/vouchers/{id}, where id is the voucher's coupon item id from
+// the bag (vouchers[].id) — Salesforce removes coupons by item id, not by code (the code answers 404
+// "Coupon Item Not Found"). Pacsun answers with the bag (vouchers: []); TWC expected 204.
+export function removeVoucher(s, voucher) {
+  request(s, {
+    name: NAMES.voucherRemove,
+    method: 'DELETE',
+    path: `/cart/vouchers/${encodeURIComponent(voucher.id)}`,
+    expect: [200, 204],
+    checks: { 'voucher removed': (j, res) => res.status === 204 || (Array.isArray(j.vouchers) && !j.vouchers.some((v) => v.id === voucher.id)) },
+    data: { voucher: voucher.code, voucherId: voucher.id },
+  });
+}
 
 // Returns the bag JSON when the variant is in it (the response has no quantityAdded), else null.
 export function addToBag(s, product) {

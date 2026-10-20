@@ -2,20 +2,19 @@
 // Standard Poq endpoints come from lib/platform/.
 
 import { check } from 'k6';
-import { request, correlationFailure, stepBlocked } from '../../lib/http.js';
+import { request, stepBlocked } from '../../lib/http.js';
 import { pkcePair } from '../../lib/auth.js';
 import { productRefs } from '../../lib/platform/product.js';
 import client from './config.js';
 
 export const NAMES = {
-  dyIdentifiers: 'Dynamic Yield identifiers',
   dyHome: 'Dynamic Yield home recommendations',
   dyPdp: 'Dynamic Yield PDP recommendations',
   dyRecentlyViewed: 'Dynamic Yield recently viewed',
   giftBoxPdp: 'Gift box: bundle PDP',
   giftBoxBulkAdd: 'Gift box: bulk add',
   giftBoxEntryAdd: 'Gift box: add entry',
-  loginNoAccount: 'Login: no account for VU',
+  loginNoAccount: 'Login: no account',
   authUrl: 'Login: authorization URL',
   authorizePre: 'Login: authorize (pre-login)',
   csrf: 'Login: CSRF',
@@ -25,18 +24,6 @@ export const NAMES = {
 };
 
 // ---- Dynamic Yield ----
-
-// DY ids personalise later calls through headers. Missing ids are logged, but the journey
-// continues without them — no later request path or body depends on them.
-export function dynamicYieldIdentifiers(s) {
-  const { json } = request(s, { name: NAMES.dyIdentifiers, path: '/dynamicyield/identifiers' });
-  if (!json || !json.userId || !json.sessionId) {
-    correlationFailure(s, NAMES.dyIdentifiers, 'userId/sessionId');
-    return;
-  }
-  s.headers['dy-user-id'] = json.userId;
-  s.headers['dy-session-id'] = json.sessionId;
-}
 
 export function dyHomeRecommendations(s) {
   request(s, { name: NAMES.dyHome, path: '/dynamicyield/recommendations', query: { slotContentId: 'homepage', selector: 'home' } });

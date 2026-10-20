@@ -13,7 +13,7 @@
 //   --input <file>        product ids as a JSON array (default clients/<client>/input/products_<env>.json or products.json)
 //   --min-stock <n>       default 5
 //   --delay <min,max>     seconds between products (default 2,5)
-//   --max-rpm <n>         hard cap on requests per minute for the whole run
+//   --max-rpm <n>         hard cap on requests per minute for the whole run (required with --env prod)
 //   --max-age <hours>     resume window (default: the client's maxDataAgeHours)
 //   --fresh               ignore earlier results and start from the first product
 //

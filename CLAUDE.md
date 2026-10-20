@@ -37,7 +37,7 @@ node prep/validate-gift-bundles.mjs twc --env <env> [--allow-prod] [--max-rpm 40
 ## Safety rules (non-negotiable)
 
 - **Never run anything against prod unless the user explicitly asks for that specific run in the current conversation.** This covers `k6 run` with `ENV=prod` and any validator with `--allow-prod`. Approving a plan is not approval to run on prod.
-- **Keep prod traffic under the rate the user sets** (so far: under 60 req/min in total):
+- **Keep prod traffic under the rate the user sets** (so far: under 60 req/min in total) for sanity and validation runs against live clients. **Pacsun is exempt (user, 2026-10-15):** its load runs target the isolated `pacsun-perf` client, so no rate cap applies to it. The explicit-ask rule above and the prod guards below still do:
   - use `PROFILE=paced` with `MAX_RPM_PER_VU`, or the validators' `--max-rpm`;
   - run tools one after another, never at the same time;
   - check the busiest 60-second window afterwards (`--out json` gives request timestamps);
@@ -82,7 +82,7 @@ prep/              Node validators and reports (no dependencies)
 - **Identity:**
   - `session: 'guestToken'` (Gen-3) gives a new guest session each iteration.
   - `session: 'device'` (Gen-2) gives one persistent `poq-user-id` per VU.
-  - Logged-in scenarios map VU *n* → account *n*. k6 has no shared state, so a VU without an account falls back to the guest journey and is counted as such.
+  - Logged-in scenarios take accounts in turn by iteration number (`exec.scenario.iterationInTest % accounts.length`); k6 VU ids are global across scenarios, so they can't index the list. Keep the scenario's `maxVUs` below the account count so no two live sessions share an account. An empty list falls back to the guest journey and is counted as such.
 
 ## Conventions
 
