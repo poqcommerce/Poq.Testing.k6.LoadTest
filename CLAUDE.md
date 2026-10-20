@@ -37,7 +37,7 @@ node prep/validate-gift-bundles.mjs twc --env <env> [--allow-prod] [--max-rpm 40
 ## Safety rules (non-negotiable)
 
 - **Never run anything against prod unless the user explicitly asks for that specific run in the current conversation.** This covers `k6 run` with `ENV=prod` and any validator with `--allow-prod`. Approving a plan is not approval to run on prod.
-- **Keep prod traffic under the rate the user sets** (so far: under 60 req/min in total):
+- **Keep prod traffic under the rate the user sets** (so far: under 60 req/min in total) for sanity and validation runs against live clients. **Pacsun is exempt (user, 2026-10-15):** its load runs target the isolated `pacsun-perf` client, so no rate cap applies to it. The explicit-ask rule above and the prod guards below still do:
   - use `PROFILE=paced` with `MAX_RPM_PER_VU`, or the validators' `--max-rpm`;
   - run tools one after another, never at the same time;
   - check the busiest 60-second window afterwards (`--out json` gives request timestamps);

@@ -5,16 +5,15 @@
 // Standard Poq endpoints come from lib/platform/; Pacsun-only ones from ./endpoints.js.
 //
 // Left out on purpose:
-//   - dynamicyield/identifiers: both apps poll it (Android ~80 calls in 10 min; iOS 4 in 3 s at app
-//     open, with and without a token) and dev always answers 404; raised as a finding instead of
-//     load-testing a 404.
-//   - checkout: left out for now. On dev, POST /checkout/start returns 403 (Pacsun's dev storefront
-//     refuses Poq's session call), 2026-09-30.
+//   - dynamicyield/identifiers polling: both apps poll it (Android ~80 calls in 10 min; iOS 4 in 3 s at
+//     app open); k6 calls it once per session at app start (it answered 404 on dev on 2026-09-30, 200 since).
+//   - checkout beyond the start: the journeys stop after POST /checkout/start (no payment, no order),
+//     as the load model only needs the start (plan rev 41).
 //   - the apps' first unauthenticated try of calls that need the token (Android: products /
 //     predictive / stores; iOS: the bag at app open) — 401, then a retry: an app finding; k6 sends
 //     the token first.
 
-import { account, app, catalog, product as pdp, cart, wishlist, NAMES as PLATFORM_NAMES } from '../../lib/platform/index.js';
+import { account, app, catalog, product as pdp, cart, wishlist, checkout, NAMES as PLATFORM_NAMES } from '../../lib/platform/index.js';
 import { randomItem, randomPoint, think } from '../../lib/data.js';
 import * as pacsun from './endpoints.js';
 import client from './config.js';
@@ -29,9 +28,10 @@ export function guestBrowse(s, data) {
   return browse(s, data);
 }
 
-// ---- guest shopper: browse, then bag → move to wishlist → empty wishlist → store finder → info page ----
+// ---- guest cart abandon: browse, then bag → move to wishlist → empty wishlist → store finder → info page ----
+// (the carts that never reach checkout)
 
-export function guestShopper(s, data) {
+export function guestCartAbandon(s, data) {
   const product = guestBrowse(s, data);
   if (!product) return;
   think(s.cfg);
@@ -61,20 +61,67 @@ export function guestShopper(s, data) {
   pacsun.webViewAssets(s); // one Account-tab info page
 }
 
+// ---- guest checkout: browse, add to bag, check the bag, checkout start, then clear the bag ----
+
+export function guestCheckout(s, data) {
+  const product = guestBrowse(s, data);
+  if (!product) return;
+  think(s.cfg);
+  checkoutFromBag(s, product);
+}
+
+// ---- logged-in checkout: guest token → login → app start → browse → bag → checkout start → logout ----
+
+export function loggedInCheckout(s, data, acct) {
+  if (!startSession(s)) return;
+  think(s.cfg);
+  if (!pacsun.login(s, acct)) return;
+  const product = openApp(s, { guestToken: false }) && browse(s, data);
+  if (!product) return;
+  think(s.cfg);
+  checkoutFromBag(s, product, { voucher: Math.random() < client.voucherShare });
+  think(s.cfg);
+  account.logout(s);
+}
+
+// ---- register: opt-in (creates real accounts): guest token → account tab → sign-up form → rewards (logged in) ----
+
+export function register(s) {
+  if (!startSession(s)) return;
+  account.accountContent(s);
+  think(s.cfg);
+  if (!pacsun.register(s)) return;
+  think(s.cfg);
+  pacsun.loyaltyRewards(s);
+}
+
+// ---- logged-in user: existing test account; guest token → login → account tab (logged in) → logout ----
+
+export function loggedInUser(s, acct) {
+  if (!startSession(s)) return;
+  think(s.cfg);
+  if (!pacsun.login(s, acct)) return;
+  account.accountContent(s); // the app loads it right after login
+  think(s.cfg);
+  account.logout(s);
+}
+
 // ---- steps ----
 
 // App start. The common calls once, plus the platform-only ones: settings/config (Android) and
 // the iOS splash. The home carousels load as the user scrolls home.
-function openApp(s) {
-  if (!startSession(s)) return false;
+function openApp(s, { guestToken = true } = {}) {
+  if (guestToken && !startSession(s)) return false;
   app.launch(s, client.appVersion);
+  app.dynamicYieldIdentifiers(s); // dy-user-id / dy-session-id headers for the later calls
   app.settings(s); // Android
   app.splash(s); // iOS
   pacsun.wishlistItemIds(s);
   const banners = app.banners(s);
   once(s, 'shop', () => catalog.shop(s));
   const stories = storyIds(banners);
-  if (stories.length) app.appStories(s, stories.join(',')); // no stories carousel configured → no call
+  // No stories carousel configured → no call, unless the environment loads stories without ids (pacsun-perf).
+  if (stories.length || s.cfg.env.storiesWithoutIds) app.appStories(s, stories.join(',') || undefined);
   account.accountContent(s);
   once(s, 'wishlist', () => wishlist.wishlistGet(s));
   once(s, 'bag', () => cart.getCart(s));
@@ -130,6 +177,22 @@ function bagScreen(s, bag, product) {
   think(s.cfg);
   pacsun.wishlistAdd(s, product);
   pacsun.deleteBagItem(s, { ...item, quantity: 2 }, product);
+}
+
+// Add to bag → bag screen → [voucher] → checkout start → [remove voucher] → remove the line (nothing is left in the bag).
+function checkoutFromBag(s, product, { voucher = false } = {}) {
+  const bag = pacsun.addToBag(s, product);
+  if (!bag) return;
+  once(s, 'bag', () => cart.getCart(s));
+  const item = cart.cartItemFor(s, bag, product);
+  if (!item) return;
+  think(s.cfg);
+  // A voucher left on the account's bag by an earlier run is removed first, so this run starts clean.
+  for (const left of (bag.vouchers || []).filter((v) => v && v.id)) pacsun.removeVoucher(s, left);
+  const applied = voucher ? pacsun.applyVoucher(s) : null;
+  if (client.checkoutStart) checkout.checkoutStart(s);
+  if (applied) pacsun.removeVoucher(s, applied);
+  pacsun.deleteBagItem(s, item, product);
 }
 
 // Common requests (shop, wishlist, bag) go out once per session, even where the app re-reads them.

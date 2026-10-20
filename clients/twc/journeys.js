@@ -106,7 +106,7 @@ function openApp(s) {
   app.splash(s);
   app.settings(s);
   app.launch(s, client.appVersion);
-  twc.dynamicYieldIdentifiers(s);
+  app.dynamicYieldIdentifiers(s);
   app.banners(s);
   app.contentBlocks(s);
   twc.dyHomeRecommendations(s);

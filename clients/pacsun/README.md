@@ -9,8 +9,12 @@ far. Configuration: [config.js](config.js).
 
 | Scenario | Share | What it does |
 |---|---|---|
-| `guestBrowse` | 70% | **Read-only.** App start (guest token, launch, settings, splash, wishlist ids, banners, shop, stories, account content, wishlist, bag), home carousels, category PLP + next page, 6 sorts, a size filter and a price range, predictive search + suggested products, keyword search + next page, PDP, recently viewed |
-| `guestShopper` | 30% | `guestBrowse`, then add to bag, bag screen, quantity 2, Move to Wishlist (add to wishlist + remove the line), empty the wishlist (half the sessions delete the item, half use Clear All), store finder nearby + ZIP search, one Account-tab info page (Poq web view CSS/JS only) |
+| `guestBrowse` | 62% | **Read-only.** App start (guest token, launch, settings, splash, wishlist ids, banners, shop, stories, account content, wishlist, bag), home carousels, category PLP + next page, 6 sorts, a size filter and a price range, predictive search + suggested products, keyword search + next page, PDP, recently viewed |
+| `guestCartAbandon` | 19% | `guestBrowse`, then add to bag, bag screen, quantity 2, Move to Wishlist (add to wishlist + remove the line), empty the wishlist (half the sessions delete the item, half use Clear All), store finder nearby + ZIP search, one Account-tab info page (Poq web view CSS/JS only) |
+| `guestCheckout` | 9.5% | `guestBrowse`, add to bag, bag, **checkout start**, remove the line (no order is placed) |
+| `loggedInCheckout` | 9.5% | guest token, login, app start, browse, add to bag, bag, **checkout start**, remove the line, logout. Needs `data/accounts_<env>.json` |
+| `register` | opt-in | Guest token, account tab, register, loyalty rewards. Creates real accounts; `PROFILE=scale` runs a fixed 50 over the hold |
+| `loggedInUser` | opt-in | Guest token, login, account tab, logout (login smoke only) |
 
 - **One session type for both apps.** The backend treats iOS and Android the same; the only
   platform-specific calls are Android's `settings/config` and the iOS splash, and every session
@@ -18,8 +22,9 @@ far. Configuration: [config.js](config.js).
 - **One `poq-user-id` per session**, generated at app start and used for every step; a new session
   gets a new id. The guest token's `externalUserId` does not replace it.
 - **Common requests once per session:** shop, wishlist and bag are read once even where the app re-reads them.
-- **Requests per session:** `guestBrowse` 28, `guestShopper` 37.
-- Mix, load target (50 req/s), latency limits (1,500 ms), keywords and ZIP list are provisional placeholders.
+- **Requests per session:** `guestBrowse` 28, `guestCartAbandon` 37, `guestCheckout` 31, `loggedInCheckout` 33.
+- Mix and load target (585 req/s) come from Xceptance's web funnel scaled to the app (derivation in [config.js](config.js)); latency limits (1,500 ms), keywords and ZIP list are provisional placeholders.
+- `loggedInCheckout` is capped at 120 live sessions, the size of the account list.
 
 ## Differences from the platform
 
@@ -36,7 +41,7 @@ far. Configuration: [config.js](config.js).
 ## Left out
 
 - **Checkout:** on dev, `POST /checkout/start` returns 403 (Pacsun's dev storefront refuses Poq's session call).
-- **Dynamic Yield:** `dynamicyield/identifiers` is polled constantly by both apps and always returns 404 on dev.
+- **Dynamic Yield:** `dynamicyield/identifiers` is polled constantly by both apps; k6 calls it once per session at app start and sends the returned ids as `dy-user-id` / `dy-session-id`.
 - **Sign-in / logged-in journey, promo code:** not captured yet (needs dev accounts and a code).
 - **Storefront web views** (Shipping Options, Returns, …): Pacsun's own site; only the Poq assets they load are tested.
 
